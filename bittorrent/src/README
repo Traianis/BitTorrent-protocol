@@ -1,0 +1,37 @@
+Pentru tracker:
+    Am folosit 4 vectori care: "files" retine datele despre seeds, "finished"
+retine clientii care au terminat descarcarea, "round_robin" retine o valoare
+care ma ajuta sa diversific clientii de la care se descarca segmentele, si 
+"curr_downloading" retine clientii care descarca ceva in acel moment.
+    Apoi intr-un while am asteptat mesaje. In functie de codul mesajului am
+facut o actiune diferita:
+        - 666 (request pentru lista cu clienti).
+            Am trimis un vector cu o ordine diferita (bazandu-ma pe
+        alg Round-Robin vazut la tema anterioar) fiecarui client
+        (folosesc vectorul round_robin ce tine minte primul seed care a fost
+        trimis ultima oara). Am mai trimis un alt vector, daca era cazul, 
+        cu clientii care descarca fisierul in acel moment.
+
+        - 777 (updatarea segmentelor).
+            Am actualizat in vectorul "downloading" numarul si segmentele noi 
+        detinute de client.
+
+        - 888 (terminarea descarcarii unui fisier).
+            Am actualizat vectorul de "files" si de "downloading".
+        
+        - 999 (terminarea tuturor fisierelor de descarcat).
+            Am actualizat vectorul "finished" si am verificat terminarea
+        tuturor clientiilor.
+
+Pentru client:
+    In functia data_read_peer am citit datele din fisier si le am trimis
+trackerului. Am format cei 2 vectori, "files_to_down" retine fisierele de
+descarcat si "files_own" retine fisierele complete.
+    In functia de download cer trackerului la fiecare 10 segmente descarcate
+o lista noua cu clienti, carora le cer pe rand cate un segment diferit 
+(bazandu ma tot pe round robin). Daca am ajuns la numarul maxim de segmente
+al fisierului, scriu segmentele in fisierul de output, ii trimit trackerului
+restul de segmente(daca este cazul), si in cazul in care mai am fisiere de
+descarcat reiau procedeul.
+    In functia de upload am asteptat requesturi (pe care le am verificat) sau
+mesajul de terminare de la tracker.
