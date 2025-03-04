@@ -1,7 +1,66 @@
-# BitTorrent-protocol
-This is a simulation of BitTorrent protocol using threads and MPI
-BitTorrent is a communication protocol for sharing files, operating on a peer-to-peer (P2P) basis, enabling users to distribute data and electronic files over the Internet in a decentralized manner. To send or receive files, users utilize a BitTorrent client on a computer connected to the Internet and interact with a tracker. BitTorrent trackers provide a list of files available for transfer and enable the client to find users from whom they can download the files. Downloading through BitTorrent is considered faster than HTTP and FTP due to the absence of a central server that could limit bandwidth.
+# BitTorrent Protocol Simulation
 
-Instead of downloading a file from a single source server, the BitTorrent protocol allows users to join a swarm of nodes to simultaneously upload and download from each other. The distributed file is divided into segments, and as each node receives a new segment of the file, it becomes a source (of that segment) for other clients, freeing the original source from sending that segment to every user desiring a copy. With BitTorrent, the task of distributing the file is shared among those who want it. Thus, the source may only send a single copy of the file, but ultimately distribute it to an unlimited number of clients. Each segment is protected by a cryptographic hash, ensuring that any modification to the segment can be easily detected, preventing accidental or malicious changes.
+## Overview
+This project is a simulation of the BitTorrent protocol using threads and MPI (Message Passing Interface). The BitTorrent protocol enables decentralized file sharing, where peers collaboratively distribute file segments without relying on a central server.
 
-Segments have a consistent size throughout a single download. Due to the nature of this approach, the download of any file can be interrupted at any time and resumed at a later date without losing previously downloaded information, making BitTorrent useful for transferring large files. This also allows the client to search for available segments at a specific point in time and download them immediately, rather than stopping the download and waiting for the next segment (which might not be available).
+The implementation leverages MPI for inter-process communication and multithreading to handle multiple peer interactions efficiently. The repository includes a test suite to validate the implementation.
+
+## Features
+- Peer-to-peer (P2P) file sharing simulation using the BitTorrent protocol.
+- Multithreaded implementation for handling concurrent requests.
+- MPI-based communication for distributed processing.
+- A testing framework with predefined test cases.
+- Docker support for easy deployment and testing.
+
+## Project Structure
+```
+traianis-bittorrent-protocol/
+├── bittorrent/
+│   ├── README.md          # Additional documentation
+│   ├── Dockerfile         # Docker setup for the project
+│   ├── local.sh           # Utility script for building, testing, and running the project
+│   ├── checker/           # Testing suite
+│   │   ├── checker.sh     # Script to validate implementation against test cases
+│   │   ├── tests/         # Test cases (input/output files)
+│   ├── src/               # Source code
+│   │   ├── Makefile       # Compilation rules
+│   │   ├── bittorrent-protocol.cpp  # Main implementation
+```
+
+## Installation
+### Prerequisites
+- **C++ Compiler**: A C++ compiler supporting C++11 or newer.
+- **MPI Library**: OpenMPI or an equivalent implementation.
+
+### Build Instructions
+1. Navigate to the `src/` directory:
+   ```sh
+   cd bittorrent/src
+   ```
+2. Compile the project using the provided `Makefile`:
+   ```sh
+   make
+   ```
+3. The compiled executable `tema3` will be generated in the same directory.
+
+## Usage
+### Running the Simulation
+To run the BitTorrent simulation using `mpirun` with 4 processes:
+```sh
+mpirun -np 4 ./tema3
+```
+
+## Testing
+The repository includes a testing suite located in `bittorrent/checker/tests/`. The `checker.sh` script automates testing by comparing the program's output against expected results.
+
+To run tests manually:
+```sh
+cd bittorrent/checker
+./checker.sh
+```
+Each test case contains input files (`in*.txt`) and expected output files (`out*.txt`).
+
+
+## License
+This project is released under the MIT License.
+
